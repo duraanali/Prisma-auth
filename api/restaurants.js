@@ -1,5 +1,6 @@
 import express from 'express';
 import prisma from './lib/index.js';
+import authenticate from './middleware/authenticate.js';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -57,7 +58,7 @@ router.get('/owner/:id', async (req, res) => {
 
 
 // Add restaurant
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
     try {
         const restaurant = await prisma.restaurant.create({
             data: req.body,
@@ -75,7 +76,7 @@ router.post('/', async (req, res) => {
 });
 
 // Update restaurant
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
     try {
         const restaurant = await prisma.restaurant.update({
             where: {
@@ -95,7 +96,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete restaurant
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
     try {
         const restaurant = await prisma.restaurant.delete({
             where: {
